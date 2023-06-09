@@ -1,16 +1,11 @@
 from datetime import datetime
-import os
-os.chdir(r"C:\Users\RTX\Music\progect_pythone")
+tasks=[]
 masege="""
 1.add task to a list
 2.mark task at compleate
 3.view task
 4.Quit
 """
-with open("task_file.txt") as f:
-    tasks=f.readlines()
-
-
 def main():
 
         while True:
@@ -76,5 +71,6 @@ def view_task():
 
             
             
-if __name__=="main":          
-    main()
+# if __name__=="main":          
+main()
+print(__name__)
