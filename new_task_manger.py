@@ -71,6 +71,5 @@ def view_task():
 
             
             
-# if __name__=="main":          
-main()
-print(__name__)
+if __name__=="__main__":          
+    main()
