@@ -74,6 +74,7 @@ def view_task():
             status="✔️"if task["completed"]==True else"❌"
             print(f"{i+1}. {task['name']} ({task['date']}) {status}")
 
-        
-
-main()
+            
+            
+if __name__=="main"            
+    main()
