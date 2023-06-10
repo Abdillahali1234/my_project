@@ -1,30 +1,37 @@
-available_items = {
-    "Google Pixel 6a": {
-        "price": 280,
-        "quantity": 5
-    },
-    "SAMSUNG Galaxy S23 Ultra": {
-        "price": 1200,
-        "quantity": 3
-    },
-    "iPhone 13 Pro Max": {
-        "price": 1300,
-        "quantity": 2
-    },
-    "Xiaomi Redmi 9A": {
-        "price": 100,
-        "quantity": 4
-    },
-    "Huawei P50 Pro": {
-        "price": 1000,
-        "quantity": 1
-    },
-    "OnePlus 9 Pro": {
-        "price": 800,
-        "quantity": 1
-    },
-}
+# available_items = {
+#     "Google Pixel 6a": {
+#         "price": 280,
+#         "quantity": 5
+#     },
+#     "SAMSUNG Galaxy S23 Ultra": {
+#         "price": 1200,
+#         "quantity": 3
+#     },
+#     "iPhone 13 Pro Max": {
+#         "price": 1300,
+#         "quantity": 2
+#     },
+#     "Xiaomi Redmi 9A": {
+#         "price": 100,
+#         "quantity": 4
+#     },
+#     "Huawei P50 Pro": {
+#         "price": 1000,
+#         "quantity": 1
+#     },
+#     "OnePlus 9 Pro": {
+#         "price": 800,
+#         "quantity": 1
+#     },
+# }
 
+available_items = {
+'iPhone 13': {'price': 1000, 'quantity': 10},
+'MacBook Pro': {'price': 2000, 'quantity': 5},
+'AirPods Pro': {'price': 250, 'quantity': 2},
+'iPad Pro': {'price': 800, 'quantity': 15},
+'Apple Watch Series 7': {'price': 600, 'quantity': 3},
+}
 print("Welcome to Codezilla Store!")
 menu_message = """
 What would you like to do?
@@ -36,7 +43,11 @@ What would you like to do?
 cart={}
 def print_fincation(available_items):
     for i,iteam in enumerate(available_items):
-        print(f"{i+1}.{iteam}: ${available_items[iteam]['price']}")
+        if available_items[iteam]["quantity"]==0: 
+            print(f"{i+1}.{iteam}: ${available_items[iteam]['price']} (not Avalible)")
+        else:
+            print(f"{i+1}.{iteam}: ${available_items[iteam]['price']}")
+
 def view_available_items(available_items,cart):
     print("Availaible iteam: ")
     print_fincation(available_items)
@@ -68,11 +79,26 @@ def view_available_items(available_items,cart):
     except ValueError:
         print("enter the number for iteam integer not string")
 
-def View_Cart():
-     ...
-
+def print_cart(cart):
+    global total_cart_price
+    total_cart_price=0
+    for iteam in cart:
+        salary=cart[iteam]["price"]
+        quntity=cart[iteam]["quantity"]
+        total_cart_price+=salary*quntity
+        total_salary=salary*quntity
+        print(f"{iteam}: ${salary} x {quntity} = ${total_salary:,.2f}")
+        print("-"*20)
+    return total_cart_price
+def View_Cart(cart):
+    print("Cart: ")
+    if not cart:
+        print("no iteam in cart to view")
+        return
+    total_cart_price1=print_cart(cart)
+    print(f"total price of cart: ${total_cart_price1:,.2f}")
 def view_total_cart_price():
-     ...
+    print(f"total cart price = ${total_cart_price:,.2f}")
 
 def clear_cart():
      ...
@@ -85,7 +111,7 @@ def main():
         if user_choice=="1":
             view_available_items(available_items,cart)
         elif user_choice=="2":
-            View_Cart()
+            View_Cart(cart)
         elif user_choice=="3":
             view_total_cart_price()
         elif user_choice=="4":
