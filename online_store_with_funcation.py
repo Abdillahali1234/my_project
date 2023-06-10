@@ -1,30 +1,3 @@
-# available_items = {
-#     "Google Pixel 6a": {
-#         "price": 280,
-#         "quantity": 5
-#     },
-#     "SAMSUNG Galaxy S23 Ultra": {
-#         "price": 1200,
-#         "quantity": 3
-#     },
-#     "iPhone 13 Pro Max": {
-#         "price": 1300,
-#         "quantity": 2
-#     },
-#     "Xiaomi Redmi 9A": {
-#         "price": 100,
-#         "quantity": 4
-#     },
-#     "Huawei P50 Pro": {
-#         "price": 1000,
-#         "quantity": 1
-#     },
-#     "OnePlus 9 Pro": {
-#         "price": 800,
-#         "quantity": 1
-#     },
-# }
-
 available_items = {
 'iPhone 13': {'price': 1000, 'quantity': 10},
 'MacBook Pro': {'price': 2000, 'quantity': 5},
@@ -41,12 +14,17 @@ What would you like to do?
 4. Clear Cart
 5. Quit"""
 cart={}
-def print_fincation(available_items):
-    for i,iteam in enumerate(available_items):
-        if available_items[iteam]["quantity"]==0: 
-            print(f"{i+1}.{iteam}: ${available_items[iteam]['price']} (not Avalible)")
-        else:
-            print(f"{i+1}.{iteam}: ${available_items[iteam]['price']}")
+def print_fincation(available_items,qunitiy=False):
+    if qunitiy==False:
+        for i,iteam in enumerate(available_items):
+            if available_items[iteam]["quantity"]==0: 
+                print(f"{i+1}.{iteam}: ${available_items[iteam]['price']} (not Avalible)")
+            else:
+                print(f"{i+1}.{iteam}: ${available_items[iteam]['price']}")
+    else:
+        for i,iteam in enumerate(available_items): 
+                print(f"{i+1}.{iteam}: ${available_items[iteam]['price']} quntity you buy from{iteam} is {available_items[iteam]['quantity']}")
+              
 
 def view_available_items(available_items,cart):
     print("Availaible iteam: ")
@@ -79,29 +57,55 @@ def view_available_items(available_items,cart):
     except ValueError:
         print("enter the number for iteam integer not string")
 
-def print_cart(cart):
-    global total_cart_price
-    total_cart_price=0
+def print_cart(cart,print_cart=False,re_total=False):
+    total_price_for_cart=0
     for iteam in cart:
         salary=cart[iteam]["price"]
         quntity=cart[iteam]["quantity"]
-        total_cart_price+=salary*quntity
+        total_price_for_cart+=salary*quntity
         total_salary=salary*quntity
-        print(f"{iteam}: ${salary} x {quntity} = ${total_salary:,.2f}")
-        print("-"*20)
-    return total_cart_price
+        if print_cart==True:
+            print(f"{iteam}: ${salary} x {quntity} = ${total_salary:,.2f}")
+            print("-"*20)
+    if re_total==True:
+        return total_price_for_cart
 def View_Cart(cart):
     print("Cart: ")
     if not cart:
         print("no iteam in cart to view")
         return
-    total_cart_price1=print_cart(cart)
-    print(f"total price of cart: ${total_cart_price1:,.2f}")
-def view_total_cart_price():
-    print(f"total cart price = ${total_cart_price:,.2f}")
+    print_cart(cart,print_cart=True)
+    total_cart_price=print_cart(cart,re_total=True)
+    print(f"total price of cart: ${total_cart_price:,.2f}")
 
-def clear_cart():
-     ...
+def view_total_cart_price(cart):
+    print("-"*20)
+    total_cart_price1=print_cart(cart,re_total=True)
+    print(f"total cart price = ${ total_cart_price1:,.2f}")
+
+def clear_cart(cart):
+    masege="""1.enter to clear all cart
+2.enter to clear specific iteam"""
+    print(masege)
+    choice=input("enter your chice please: ")
+    if choice=="1":
+        print("iteams in the cart before deleting: ")
+        print_cart(cart,print_cart=True)
+        total_price=print_cart(cart,re_total=True)
+        print(f"total price of cart= ${total_price:,.2f}")
+        question_to_confirm=input("are you sure you want to clear the cart? (y/n): ")
+        if question_to_confirm=="y":
+            cart.clear()
+            print("card has been cleared successfuly")
+        elif question_to_confirm=="n":
+            print("card has not been cleared successfuly")
+            return    
+        else:
+            print("invalid choice")
+            clear_cart(cart)
+    elif choice=="2":
+        print_fincation(cart,qunitiy=True)
+        number_iteam=int(input("enter number of iteam you want delete (enter 0 to return main menu): " ))
 
 
 def main():
@@ -113,9 +117,9 @@ def main():
         elif user_choice=="2":
             View_Cart(cart)
         elif user_choice=="3":
-            view_total_cart_price()
+            view_total_cart_price(cart)
         elif user_choice=="4":
-            clear_cart()
+            clear_cart(cart)
         elif user_choice=="5":
             break
         else:
