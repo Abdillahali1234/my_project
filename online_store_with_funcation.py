@@ -46,7 +46,8 @@ def view_available_items(available_items,cart):
                 print(f"sorry,we only have {available_quntity} ")
                 return
             else:
-                info_iteam={name_order:{"price":available_items[name_order]["price"],"quantity":user_quntiity}}
+                order_quntity=cart.get(name_order,{}).get("quantity",0)+user_quntiity
+                info_iteam={name_order:{"price":available_items[name_order]["price"],"quantity":order_quntity}}
                 cart.update(info_iteam)
                 available_items[name_order]["quantity"]-=user_quntiity
                 print(f"{name_order} added successfuly to cart")
@@ -83,30 +84,42 @@ def view_total_cart_price(cart):
     total_cart_price1=print_cart(cart,re_total=True)
     print(f"total cart price = ${ total_cart_price1:,.2f}")
 
-def clear_cart(cart):
-    masege="""1.enter to clear all cart
-2.enter to clear specific iteam"""
-    print(masege)
-    choice=input("enter your chice please: ")
-    if choice=="1":
-        print("iteams in the cart before deleting: ")
-        print_cart(cart,print_cart=True)
-        total_price=print_cart(cart,re_total=True)
-        print(f"total price of cart= ${total_price:,.2f}")
-        question_to_confirm=input("are you sure you want to clear the cart? (y/n): ")
-        if question_to_confirm=="y":
-            cart.clear()
-            print("card has been cleared successfuly")
-        elif question_to_confirm=="n":
-            print("card has not been cleared successfuly")
-            return    
-        else:
-            print("invalid choice")
-            clear_cart(cart)
-    elif choice=="2":
-        print_fincation(cart,qunitiy=True)
-        number_iteam=int(input("enter number of iteam you want delete (enter 0 to return main menu): " ))
+def clear_cart(cart,available_items):
+    if cart:
+        masege="""1.to clear all cart
+2.to clear specific iteam"""
+        print(masege)
+        choice=input("enter your chice please: ")
+        if choice=="1":
+            print("iteams in the cart before deleting: ")
+            print_cart(cart,print_cart=True)
+            total_price=print_cart(cart,re_total=True)
+            print(f"total price of cart= ${total_price:,.2f}")
+            question_to_confirm=input("are you sure you want to clear the cart? (y/n): ")
+            if question_to_confirm=="y":
+                for iteam in cart:
+                    available_items[iteam]["quantity"]+=cart[iteam]["quantity"]
+                cart.clear()
+                print("card has been cleared successfuly")
+            
+            elif question_to_confirm=="n":
+                print("card has not been cleared successfuly")
+                return    
+            else:
+                print("invalid choice")
+                clear_cart(cart,available_items)
+        elif choice=="2":
+            print_fincation(cart,qunitiy=True)
+            number_iteam=int(input("enter number of iteam you want delete (enter 0 to return main menu): " ))
+            name_iteam=list(cart.keys())[number_iteam-1]
+            available_items[name_iteam]["quantity"]+=cart[name_iteam]["quantity"]
+            cart.pop(name_iteam)
+            print(f"{name_iteam} cleared successfuly")
 
+        else:
+            print("invalid choice,enter 1 or 2")    
+    else:
+        print("no iteam in cart so far")
 
 def main():
     while True:
@@ -119,11 +132,11 @@ def main():
         elif user_choice=="3":
             view_total_cart_price(cart)
         elif user_choice=="4":
-            clear_cart(cart)
+            clear_cart(cart,available_items)
         elif user_choice=="5":
             break
         else:
             print("please enter number from 1 to 5 ")   
 
-
-main()
+if __name__=="__main__":
+    main()
